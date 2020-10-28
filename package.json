@@ -1,0 +1,21 @@
+{
+  "name": "gallery_spider",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "description": "",
+  "dependencies": {
+    "@types/node": "^14.14.5",
+    "axios": "^0.21.0",
+    "cheerio": "^1.0.0-rc.3",
+    "node-https-socks5-proxy": "^1.0.5"
+  },
+  "devDependencies": {
+    "@types/cheerio": "^0.22.22"
+  }
+}
