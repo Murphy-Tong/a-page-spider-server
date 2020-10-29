@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 
-type ImageItem = {
+export type ImageItem = {
   title: string;
   thumbnail: string;
   thumbnailWidth: number;
@@ -43,12 +43,13 @@ const parseItemGallery = (ele: cheerio.Element) => {
     config.thumbnail = imgTag.attribs["src"];
     const numTag = $("div.gl5t > div:nth-child(2) > div:nth-child(2)");
     config.imgNum = parseInt(numTag[0].children[0].data.match(/\d*/)[0]);
-    console.log(config);
   }
   return config;
 };
 
-const parseGalleryPage = (html: string) => {
+const parseFavoPage: (
+  html: string
+) => Promise<Array<ImageItem>> = async function (html: string) {
   const $ = cheerio.load(html);
   const imageContainers = $("body > div.ido > form > div.itg.gld > div");
   const imageConfigs: Array<ImageItem> = [];
@@ -60,4 +61,19 @@ const parseGalleryPage = (html: string) => {
   return imageConfigs;
 };
 
-export { parseGalleryPage };
+const parsePagesInFavo: (html: string) => number = function (html) {
+  const $ = cheerio.load(html);
+  const tr = $("body > div.ido > form > table.ptt > tbody > tr");
+  if (tr && tr.length > 0) {
+    const childs = tr[0].childNodes;
+    if (childs && childs.length > 0) {
+      if (childs.length < 2) {
+        return 1;
+      }
+      return parseInt(childs[childs.length - 2].childNodes[0].children[0].data);
+    }
+  }
+  return 0;
+};
+
+export { parseFavoPage, parsePagesInFavo };

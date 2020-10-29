@@ -98,7 +98,6 @@ const openHtml = async (url: string) => {
     })
     .catch(console.log);
   if (res && res.status == 200) {
-    console.log(res.headers);
     return res.data;
   }
   return null;
