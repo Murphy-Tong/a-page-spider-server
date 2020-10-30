@@ -1,4 +1,5 @@
 import * as cheerio from "cheerio";
+import { parseIamgeStyle } from "./utils/stringUtil";
 
 export type ImageItem = {
   title: string;
@@ -7,25 +8,6 @@ export type ImageItem = {
   thumbnailHeight: number;
   detailPageSrc: string;
   imgNum: number;
-};
-
-const parseIamgeStyle = (imgStyle: string) => {
-  const styles = imgStyle.split(";");
-  const size: Array<number> = [];
-  if (styles && styles.length >= 2) {
-    for (const index in styles) {
-      const str = styles[index].trim();
-      if (str.startsWith("width")) {
-        size[0] = parseInt(str.replace("width:", "").replace("px", ""));
-      } else if (str.startsWith("height")) {
-        size[1] = parseInt(str.replace("height:", "").replace("px", ""));
-      }
-      if (size[0] && size[1]) {
-        break;
-      }
-    }
-  }
-  return size;
 };
 
 const parseItemGallery = (ele: cheerio.Element) => {

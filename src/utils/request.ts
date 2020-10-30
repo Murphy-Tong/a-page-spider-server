@@ -47,7 +47,7 @@ const getSocket: (arg: string) => Promise<Net.Socket> = async (url: string) => {
 
 type GetRequest<T> = (url: string) => Promise<T>;
 
-const get: GetRequest<http.IncomingMessage | Error> = async (url: string) => {
+const get: GetRequest<http.IncomingMessage> = async (url: string) => {
   if (!url) {
     console.log("url empty");
     return;
@@ -66,8 +66,11 @@ const get: GetRequest<http.IncomingMessage | Error> = async (url: string) => {
         host: uri.hostname,
         port: port,
         path: uri.path,
-        headers: UserConfig.headers,
-        createConnection: (opt, oncreate) => {
+        headers: {
+          ...UserConfig.headers,
+          connection: "keep-alive",
+        },
+        createConnection: () => {
           return socket;
         },
       },
@@ -89,6 +92,7 @@ const instance = axios.create({
 });
 
 const openHtml = async (url: string) => {
+  url = url.replace("https:", "http:");
   const res = await instance
     .get(url, {
       proxy: {

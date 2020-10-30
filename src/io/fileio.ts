@@ -8,11 +8,11 @@ export const fileState: (path: string) => Promise<number> = async function (
 ) {
   const exist = fs.existsSync(path);
   if (!exist) {
-    throw new Error("文件不存在:" + path);
+    return 0;
   }
   const statu = await fs.promises.stat(path).catch(console.log);
   if (!statu) {
-    throw new Error("文件不存在:" + path);
+    return 0;
   }
   return statu.isFile() ? 1 : 2;
 };
@@ -35,9 +35,9 @@ export const getCachePath: (
   return `${localPath}/${fileName}`;
 };
 
-export const readFile: (file: string) => Promise<Buffer> = async function (
+export const readFile: (
   file: string
-) {
+) => Promise<Buffer | void> = async function (file: string) {
   const state = await fileState(file).catch(console.log);
   if (state === 1) {
     const buf = await fs.promises.readFile(file).catch(console.log);
@@ -45,7 +45,6 @@ export const readFile: (file: string) => Promise<Buffer> = async function (
       return buf;
     }
   }
-  throw new Error("文件不存在:" + file);
 };
 
 export const writeFileString: (
@@ -86,4 +85,29 @@ export const readFavoPageConfig = async function (url: string) {
 
 const md5 = (str: string) => {
   return crypto.createHash("md5").update(str).digest("hex");
+};
+
+export const getExistImageIf: (
+  cacheDir: string,
+  imageName: string
+) => Promise<string | void> = async function (
+  cacheDir: string,
+  imageName: string
+) {
+  const stat = await fileState(cacheDir).catch(console.log);
+  if (stat === 2) {
+    const files = await fs.promises.readdir(cacheDir, { withFileTypes: true });
+    if (files && files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        const item = files[i];
+        if (item.isFile()) {
+          if (imageName.indexOf(".") >= 0 && imageName == item.name) {
+            return cacheDir + "/" + item.name;
+          } else if (imageName + path.extname(item.name) == item.name) {
+            return cacheDir + "/" + item.name;
+          }
+        }
+      }
+    }
+  }
 };
