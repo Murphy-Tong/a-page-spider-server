@@ -76,6 +76,13 @@ export const writeFavoPageConfig = async function (
   });
 };
 
+export const deleteFavoPageConfig = async function (url: string) {
+  const hash = md5(url);
+  return getCachePath(hash + ".json", "favos").then((cachePath) => {
+    deleteFile(cachePath);
+  });
+};
+
 export const readFavoPageConfig = async function (url: string) {
   const hash = md5(url);
   return getCachePath(hash + ".json", "favos")

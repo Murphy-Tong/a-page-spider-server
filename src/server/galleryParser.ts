@@ -4,6 +4,7 @@ import * as stringUtil from "./utils/stringUtil";
 import { parseIamgeStyle } from "./utils/stringUtil";
 import * as FileIO from "./io/fileio";
 import * as ImageDownload from "./imagedownloader";
+import { url } from "inspector";
 
 type BigImage = {
   url: string;
@@ -47,7 +48,14 @@ export const downloadImageInGallery = async (
       }
     }
   }
-  return await Promise.all(imageDownloadTask);
+  return await Promise.all(imageDownloadTask).catch(async (err) => {
+    if (err instanceof Error) {
+      if (err.message.indexOf("403") >= 0) {
+        await FileIO.deleteFavoPageConfig(originUrl).catch(console.log);
+      }
+    }
+    throw err;
+  });
 };
 
 export const parserGallery = async (originUrl: string) => {

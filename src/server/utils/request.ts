@@ -18,8 +18,10 @@ const getSocket: (arg: string) => Promise<Net.Socket> = async (url: string) => {
   const key = uri.hostname + uri.port;
   const oldSock = sockMap[key];
   if (oldSock && oldSock.connecting) {
+    console.log("use exist socket");
     return Promise.resolve(oldSock);
   } else {
+    console.log("create new socket");
     const isHttps = uri.protocol === "https:";
     const port = uri.port ? parseInt(uri.port) : isHttps ? 443 : 80;
     return new Promise((res, rej) => {
@@ -35,6 +37,7 @@ const getSocket: (arg: string) => Promise<Net.Socket> = async (url: string) => {
           if (err) {
             rej(err);
           } else {
+            socket.on("close", (er) => console.log("closed", er));
             socket.setKeepAlive(true);
             sockMap[key] = socket;
             res(socket);

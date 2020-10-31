@@ -1,6 +1,6 @@
 import * as Net from "net";
 import * as HtmlDownload from "./htmlDownload";
-import * as request from "./utils/request";
+import * as request from "./server/utils/request";
 import siteConfig from "./siteConfig";
 
 console.log(siteConfig);

@@ -1,8 +1,10 @@
 import * as express from "express";
 import * as fs from "fs";
-import { downloadImage } from "../imagedownloader";
-import * as FileIO from "../io/fileio";
-import { getExistImageIf } from "../io/fileio";
+import { downloadImage } from "./imagedownloader";
+import * as FileIO from "./io/fileio";
+import { getExistImageIf } from "./io/fileio";
+import * as FavoParser from "./favoParser";
+import siteConfig from "./siteConfig";
 const app = express();
 
 app.get("/turningImage", async function (req, res) {
@@ -32,6 +34,20 @@ app.get("/turningImage", async function (req, res) {
       res
     );
   }
+});
+
+// app.get("/downloadGallery");
+app.get("/getMyFavos", async (req, res) => {
+  const favoConfig = await FavoParser.parseFavo(siteConfig.favo).catch(
+    (e: any) => {
+      console.log(e);
+      res.writeHead(500);
+      res.end();
+    }
+  );
+  res.writeHead(200);
+  res.write(JSON.stringify(favoConfig));
+  res.end();
 });
 
 app.listen(3001);
