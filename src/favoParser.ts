@@ -7,10 +7,14 @@ type FavoPage = {
   imgs: ImageItem[];
 };
 
+let cachedFavo: Array<FavoPage> | null = null;
 export const parseFavo: (
   originUrl: string
 ) => Promise<void | Array<FavoPage>> = async function (originUrl) {
-  //   const url = removeQuery(originUrl);
+  if (cachedFavo) {
+    console.log("LOAD FROM MEM", url);
+    return cachedFavo;
+  }
   const url = originUrl;
   const favoPage = await openHtml(url).catch(console.log);
   if (favoPage) {
@@ -25,7 +29,14 @@ export const parseFavo: (
       const pageUrl = `${url}?page=${i}`;
       parserTask.push(getPageConfig(pageUrl, null));
     }
-    return Promise.all(parserTask).catch(console.log);
+    return Promise.all(parserTask)
+      .then((res) => {
+        if (res) {
+          cachedFavo = res;
+        }
+        return res;
+      })
+      .catch(console.log);
   }
 };
 
