@@ -5,7 +5,7 @@ import * as URL from "url";
 import * as Net from "net";
 import axios from "axios";
 
-import UserConfig from "../userConfig";
+import UserConfig from "../../config/userConfig";
 
 type SockMap = { [key: string]: Net.Socket };
 const sockMap: SockMap = {};

@@ -33,7 +33,17 @@ import * as Parser from "../src/galleryParser";
 //   })
 //   .catch(console.log);
 
-Parser.downloadImageInGallery(
-  "https://e-hentai.org/g/1766579/fd1a3a3676/",
-  "aa"
-).then(() => console.log("ssss"));
+// Parser.downloadImageInGallery(
+//   "https://e-hentai.org/g/1766579/fd1a3a3676/",
+//   "aa"
+// ).then(() => console.log("ssss"));
+
+// import * as dotenv from "dotenv";
+// dotenv.config();
+console.log("aaa");
+import * as Types from "../src/types/index";
+// eslint-disable-next-line no-var
+var S_CONFIG: Types.S_CONFIG = S_CONFIG || null;
+console.log("aaa");
+console.log(S_CONFIG);
+console.log("aaa");
