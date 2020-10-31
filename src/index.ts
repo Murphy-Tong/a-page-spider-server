@@ -4,11 +4,10 @@ import { downloadImage } from "./imagedownloader";
 import * as FileIO from "./io/fileio";
 import { getExistImageIf } from "./io/fileio";
 import * as FavoParser from "./favoParser";
-import siteConfig from "./siteConfig";
-import * as dotenv from "dotenv";
-dotenv.config();
+import siteConfig from "../config/siteConfig";
+
 const app = express();
-console.log(process.env["UserConfig"]);
+
 app.get("/turningImage", async function (req, res) {
   const { galleryName, imageUrl, imageName } = req.query;
   const cacheDir = await FileIO.getCachePath(
@@ -53,3 +52,4 @@ app.get("/getMyFavos", async (req, res) => {
 });
 
 app.listen(3001);
+console.log("listening on 3001");
