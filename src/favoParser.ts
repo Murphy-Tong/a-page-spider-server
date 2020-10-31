@@ -12,7 +12,7 @@ export const parseFavo: (
   originUrl: string
 ) => Promise<void | Array<FavoPage>> = async function (originUrl) {
   if (cachedFavo) {
-    console.log("LOAD FROM MEM", url);
+    console.log("LOAD FROM MEM", originUrl);
     return cachedFavo;
   }
   const url = originUrl;
